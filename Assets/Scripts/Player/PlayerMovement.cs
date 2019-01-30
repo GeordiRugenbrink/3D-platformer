@@ -34,7 +34,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move() {
         Rotation(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-       
     }
 
     private void Rotation(float horizontal, float vertical) {
@@ -48,6 +47,9 @@ public class PlayerMovement : MonoBehaviour
 
         Quaternion newRotation = Quaternion.Lerp(transform.localRotation, targetRotation, turnSmoothing * Time.deltaTime);
 
-        transform.rotation = newRotation;
+        if (Mathf.Abs(Input.GetAxis("Horizontal")) >= 0.5f &&
+            Mathf.Abs(Input.GetAxis("Vertical")) >= 0.5f) {
+            transform.rotation = newRotation;
+        }
     }
 }

@@ -35,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
         else {
             currentMovementSpeed = movementSpeed;
         }
-
         Move();
     }
 
@@ -54,8 +53,8 @@ public class PlayerMovement : MonoBehaviour
 
         Quaternion newRotation = Quaternion.Lerp(transform.localRotation, targetRotation, turnSmoothing * Time.deltaTime);
 
-        if (Mathf.Abs(Input.GetAxis("Horizontal")) >= 0.5f &&
-            Mathf.Abs(Input.GetAxis("Vertical")) >= 0.5f) {
+        if (Input.GetAxisRaw("Vertical") > 0.1f || Input.GetAxisRaw("Vertical") < -0.1f ||
+            Input.GetAxisRaw("Horizontal") > 0.1f || Input.GetAxisRaw("Horizontal") < -0.1f) {
             transform.rotation = newRotation;
         }
     }
@@ -63,6 +62,8 @@ public class PlayerMovement : MonoBehaviour
 
 public enum PlayerStanceState {
     CROUCHING,
+    ATTACKING,
+    JUMPING,
     NORMAL
 }
 

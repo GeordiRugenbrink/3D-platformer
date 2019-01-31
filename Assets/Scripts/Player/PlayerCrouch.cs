@@ -15,12 +15,19 @@ public class PlayerCrouch : MonoBehaviour
             ReturnToNormalSize();
         }
     }
-
+    /// <summary>
+    /// Changes the size of the player to make it look like it's crouching.
+    /// </summary>
     private void Crouch() {
         transform.localScale = new Vector3(1, crouchHeight, 1);
         PlayerMovement.playerStanceState = PlayerStanceState.CROUCHING;
     }
 
+    /// <summary>
+    /// Returns the player to it's normal size after crouching.
+    /// First it checks if it has enough room to return to it's normal size
+    /// before it actually changes it's size.
+    /// </summary>
     private void ReturnToNormalSize() {
         Ray ray = new Ray();
         RaycastHit hit;
@@ -28,7 +35,9 @@ public class PlayerCrouch : MonoBehaviour
         ray.direction = Vector3.up;
         if (!Physics.Raycast(ray, out hit, 1)) {
             transform.localScale = Vector3.one;
-            PlayerMovement.playerStanceState = PlayerStanceState.NORMAL;
+            if (PlayerMovement.playerStanceState != PlayerStanceState.JUMPING) {
+                PlayerMovement.playerStanceState = PlayerStanceState.NORMAL;
+            }
         }
         else {
             Debug.Log("Not enough room to stand up!");

@@ -30,7 +30,7 @@ public class PlayerJump : MonoBehaviour
             Input.GetButtonDown("Jump") &&
             PlayerMovement.playerGroundState == PlayerGroundState.GROUNDED) {
             CrouchJump(crouchJumpForce);
-        }else if (Input.GetButtonDown("Jump")) {
+        }else if (Input.GetButtonDown("Jump") && PlayerMovement.playerStanceState != PlayerStanceState.ATTACKING) {
             Jump(jumpForce);
         }
 
@@ -45,6 +45,7 @@ public class PlayerJump : MonoBehaviour
         if (jumps > 0) {
             rigidbody.velocity = Vector3.up * jumpForce;
             PlayerMovement.playerGroundState = PlayerGroundState.AIRBORNE;
+            PlayerMovement.playerStanceState = PlayerStanceState.JUMPING;
             jumps -= 1;
         }
 
@@ -52,17 +53,27 @@ public class PlayerJump : MonoBehaviour
             return;
         }
     }
-
+    /// <summary>
+    /// When crouching and jumping at the same time the player will have an increased jumpforce
+    /// so it gets one incredibly high jump. The player can't use double jump after this jump though.
+    /// </summary>
+    /// <param name="jumpForce">The amount of force applied to the player's y velocity.</param>
     private void CrouchJump(float jumpForce) {
         rigidbody.velocity = Vector3.up * jumpForce;
         PlayerMovement.playerGroundState = PlayerGroundState.AIRBORNE;
+        PlayerMovement.playerStanceState = PlayerStanceState.JUMPING;
         jumps -= maxJumps;
     }
 
+    /// <summary>
+    /// Checks if the player has touched the ground.
+    /// </summary>
+    /// <param name="other">The other collision used to compare with the ground.</param>
     private void OnCollisionEnter(Collision other) {
         if(other.gameObject.tag == "Ground") {
             jumps = maxJumps;
             PlayerMovement.playerGroundState = PlayerGroundState.GROUNDED;
+            PlayerMovement.playerStanceState = PlayerStanceState.NORMAL;
         }
     }
 }

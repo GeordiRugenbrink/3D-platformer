@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float diagonalSpeedMultiplier = 0.75f;
 
+    private Rigidbody rigidbody;
+
     [SerializeField]
     private float turnSmoothing = 15f;
 
@@ -16,11 +18,16 @@ public class PlayerMovement : MonoBehaviour
 
     private new Camera camera;
 
+    public static PlayerStanceState playerStanceState = PlayerStanceState.NORMAL;
+
+    public static PlayerGroundState playerGroundState = PlayerGroundState.GROUNDED;
+
     private void Start() {
+        rigidbody = GetComponent<Rigidbody>();
         camera = Camera.main;
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         if (Mathf.Abs(Input.GetAxis("Horizontal")) >= 0.5f &&
             Mathf.Abs(Input.GetAxis("Vertical")) >= 0.5f) {
             currentMovementSpeed = movementSpeed * diagonalSpeedMultiplier;
@@ -41,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         targetDirection = camera.transform.TransformDirection(targetDirection);
         targetDirection.y = 0.0f;
 
-        transform.position += Vector3.Normalize(targetDirection) * currentMovementSpeed * Time.deltaTime;
+        rigidbody.MovePosition(rigidbody.position + Vector3.Normalize(targetDirection) * currentMovementSpeed * Time.fixedDeltaTime);
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
 
@@ -52,4 +59,14 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = newRotation;
         }
     }
+}
+
+public enum PlayerStanceState {
+    CROUCHING,
+    NORMAL
+}
+
+public enum PlayerGroundState {
+    GROUNDED,
+    AIRBORNE
 }

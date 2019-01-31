@@ -8,7 +8,7 @@ public class PlayerCrouch : MonoBehaviour
     private float crouchHeight = 0.5f;
 
     private void Update() {
-        if (Input.GetAxis("Crouch") > 0.5f) {
+        if (Input.GetAxis("Crouch") > 0.5f && PlayerMovement.playerGroundState == PlayerGroundState.GROUNDED) {
             Crouch();
         }
         else {
@@ -18,6 +18,7 @@ public class PlayerCrouch : MonoBehaviour
 
     private void Crouch() {
         transform.localScale = new Vector3(1, crouchHeight, 1);
+        PlayerMovement.playerStanceState = PlayerStanceState.CROUCHING;
     }
 
     private void ReturnToNormalSize() {
@@ -27,6 +28,7 @@ public class PlayerCrouch : MonoBehaviour
         ray.direction = Vector3.up;
         if (!Physics.Raycast(ray, out hit, 1)) {
             transform.localScale = Vector3.one;
+            PlayerMovement.playerStanceState = PlayerStanceState.NORMAL;
         }
         else {
             Debug.Log("Not enough room to stand up!");

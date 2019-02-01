@@ -25,8 +25,8 @@ public class PlayerJump : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
     }
 
-    private void Update() {
-        if(PlayerMovement.playerStanceState == PlayerStanceState.CROUCHING &&
+    private void FixedUpdate() {
+        if (PlayerMovement.playerStanceState == PlayerStanceState.CROUCHING &&
             Input.GetButtonDown("Jump") &&
             PlayerMovement.playerGroundState == PlayerGroundState.GROUNDED) {
             CrouchJump(crouchJumpForce);
@@ -35,9 +35,9 @@ public class PlayerJump : MonoBehaviour
         }
 
         if (rigidbody.velocity.y < 0) {
-            rigidbody.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            rigidbody.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
         }else if(rigidbody.velocity.y > 0 && !Input.GetButton("Jump")) {
-            rigidbody.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+            rigidbody.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
         }
     }
 

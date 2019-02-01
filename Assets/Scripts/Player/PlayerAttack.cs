@@ -18,7 +18,7 @@ public class PlayerAttack : MonoBehaviour
             PlayerMovement.playerGroundState == PlayerGroundState.AIRBORNE &&
             PlayerMovement.playerStanceState == PlayerStanceState.JUMPING) {
             Attack(aerialAttackCollider);
-        }
+        } 
     }
 
     /// <summary>

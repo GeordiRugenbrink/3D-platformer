@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJump : MonoBehaviour
+public class PlayerJump : MonoBehaviour, IJump
 {
     [SerializeField]
     private float jumpForce = 7f;
@@ -41,9 +41,9 @@ public class PlayerJump : MonoBehaviour
         }
     }
 
-    private void Jump(float jumpForce) {
+    public void Jump(float jumpForce) {
         if (jumps > 0) {
-            rigidbody.velocity = Vector3.up * jumpForce;
+            rigidbody.velocity += Vector3.up * jumpForce;
             PlayerMovement.playerGroundState = PlayerGroundState.AIRBORNE;
             PlayerMovement.playerStanceState = PlayerStanceState.JUMPING;
             jumps -= 1;
